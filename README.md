@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Mohamed Ibrahem — Portfolio
 
-## Getting Started
+Personal portfolio and online resume of **Mohamed Ibrahem Saied**, Frontend Developer based in Riyadh, Saudi Arabia.
 
-First, run the development server:
+Built with **Next.js (App Router)**, **TypeScript** and **Tailwind CSS v4**. Fully static — no backend, no external requests at runtime (fonts are self-hosted).
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Script          | What it does                     |
+| --------------- | -------------------------------- |
+| `npm run dev`   | Start the development server     |
+| `npm run build` | Create a production build        |
+| `npm run start` | Serve the production build       |
+| `npm run lint`  | Lint the project with ESLint     |
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+├── app/
+│   ├── layout.tsx          # Root layout, metadata, skip link
+│   ├── page.tsx            # Composes the page from sections
+│   ├── globals.css         # Design tokens (@theme), utilities, grain & reveal effects
+│   └── icon.svg            # Favicon
+├── components/
+│   ├── layout/             # Header (sticky nav + mobile menu), Footer
+│   ├── sections/           # Hero, Experience, Highlights, Skills, Leadership, Education, Contact
+│   └── ui/                 # Reusable primitives: Container, SectionHeading, Reveal, Marquee, Tag
+├── data/
+│   └── profile.ts          # ← All site content lives here
+└── types/
+    └── profile.ts          # Content types
+public/
+├── images/mohamed.jpg      # Profile photo
+└── Mohamed_Ibrahem_Saied_CV.pdf
+```
 
-## Learn More
+## Editing content
 
-To learn more about Next.js, take a look at the following resources:
+All text — experience, highlights, skills, education, links — lives in [`src/data/profile.ts`](src/data/profile.ts). Components only render that data, so updating the site is a one-file change. To update the downloadable CV, replace the PDF in `public/` (keep the file name, or update `cvPath`).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Design notes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Dark theme with a film-grain overlay, deep-blue accent (`--color-accent`) and an expanded display typeface (Archivo, width 125%) paired with JetBrains Mono for labels.
+- Colors and fonts are defined once as Tailwind v4 theme tokens in `globals.css`.
+- Scroll-reveal animations use a single `IntersectionObserver` per element; all motion respects `prefers-reduced-motion`.
+- Accessible by default: semantic landmarks, skip link, visible focus states, labelled navigation.
 
-## Deploy on Vercel
+## Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The site is fully static and can be hosted on Vercel, Firebase Hosting, Netlify or GitHub Pages. When publishing, set `NEXT_PUBLIC_SITE_URL` to the live URL so Open Graph metadata resolves correctly.

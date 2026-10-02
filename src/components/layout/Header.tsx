@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { profile } from "@/data/profile";
+import { asset } from "@/lib/asset";
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -52,7 +53,7 @@ export function Header() {
 
         <div className="flex items-center gap-4">
           <a
-            href={profile.cvPath}
+            href={asset(profile.cvPath)}
             download
             className="label-mono rounded-full border border-line-strong px-4 py-2 text-fg transition-colors hover:border-accent hover:text-accent"
           >

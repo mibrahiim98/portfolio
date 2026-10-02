@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { profile } from "@/data/profile";
+import { asset } from "@/lib/asset";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
     type: "profile",
     title: `${profile.shortName} — ${profile.title}`,
     description: profile.intro,
-    images: [{ url: profile.photo, width: 900, height: 1353, alt: profile.name }],
+    images: [{ url: asset(profile.photo), width: 900, height: 1353, alt: profile.name }],
   },
   twitter: {
     card: "summary",

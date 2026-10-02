@@ -1,4 +1,5 @@
 import { profile } from "@/data/profile";
+import { asset } from "@/lib/asset";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 
@@ -52,7 +53,7 @@ export function Contact() {
               </a>
             ))}
           <a
-            href={profile.cvPath}
+            href={asset(profile.cvPath)}
             download
             className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5"
           >

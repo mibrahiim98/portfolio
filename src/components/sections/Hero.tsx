@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { profile } from "@/data/profile";
+import { asset } from "@/lib/asset";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 
@@ -50,7 +51,7 @@ export function Hero() {
               Get in touch
             </a>
             <a
-              href={profile.cvPath}
+              href={asset(profile.cvPath)}
               download
               className="rounded-full border border-line-strong px-6 py-3 text-sm font-semibold transition-colors hover:border-accent hover:text-accent"
             >
@@ -74,7 +75,7 @@ export function Hero() {
           <div className="absolute -inset-3 rounded-[2rem] bg-gradient-to-br from-accent/40 via-transparent to-transparent blur-2xl" />
           <div className="relative overflow-hidden rounded-[1.75rem] border border-line-strong bg-surface">
             <Image
-              src={profile.photo}
+              src={asset(profile.photo)}
               alt={`Portrait of ${profile.name}`}
               width={900}
               height={1353}

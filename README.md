@@ -4,7 +4,7 @@ Personal portfolio and online resume of **Mohamed Ibrahem Saied**, Frontend Deve
 
 Built with **Next.js (App Router)**, **TypeScript** and **Tailwind CSS v4**. Fully static — no backend, no external requests at runtime (fonts are self-hosted).
 
-**Live:** https://mibrahiim98.github.io/portfolio/
+**Live:** https://moibrahem98.web.app (mirror: https://mibrahiim98.github.io/portfolio/)
 
 ## Getting started
 
@@ -57,9 +57,17 @@ All text — experience, highlights, skills, education, links — lives in [`src
 
 ## Deployment
 
-The site is exported as static HTML (`output: "export"`) and deployed to **GitHub Pages** by [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) on every push to `main`.
+The site is exported as static HTML (`output: "export"`) into `out/` and deployed automatically on every push to `main`.
 
-- The build runs with `GITHUB_PAGES=true`, which sets the `/portfolio` base path (see `next.config.ts`).
+### Firebase Hosting (primary) — `moibrahem98.web.app`
+
+- Workflow: [`.github/workflows/firebase-deploy.yml`](.github/workflows/firebase-deploy.yml) builds and deploys to the live channel of the `moibrahem98` Firebase project.
+- Hosting config lives in [`firebase.json`](firebase.json) (serves `out/`, clean URLs, long-term caching for hashed assets).
+- Requires a repository secret named `FIREBASE_SERVICE_ACCOUNT` containing a Firebase service account JSON key (Firebase console → Project settings → Service accounts → Generate new private key).
+- Manual deploy: `npm run build && npx firebase-tools deploy --only hosting`.
+
+### GitHub Pages (mirror) — `mibrahiim98.github.io/portfolio`
+
+- Workflow: [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml). The build runs with `GITHUB_PAGES=true`, which sets the `/portfolio` base path (see `next.config.ts`).
 - Links to files in `public/` go through `asset()` in `src/lib/asset.ts` so they get the base path too.
-- Repo setting required once: **Settings → Pages → Source: GitHub Actions**.
-- To use a custom domain later, add it under Settings → Pages, drop the base path in `next.config.ts`, and update `NEXT_PUBLIC_SITE_URL` in the workflow.
+- To retire the mirror, delete that workflow and turn off Pages in the repo settings.

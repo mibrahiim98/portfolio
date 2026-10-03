@@ -1,0 +1,65 @@
+name: Deploy to Firebase Hosting
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: firebase-live
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Skip quietly (instead of failing) until the FIREBASE_SERVICE_ACCOUNT secret is configured
+      - name: Check deploy credentials
+        id: creds
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          if [ -n "$FIREBASE_SERVICE_ACCOUNT" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::FIREBASE_SERVICE_ACCOUNT secret not set yet; skipping Firebase deploy."
+          fi
+
+      - name: Checkout
+        if: steps.creds.outputs.ready == 'true'
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        if: steps.creds.outputs.ready == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        if: steps.creds.outputs.ready == 'true'
+        run: npm ci
+
+      - name: Lint
+        if: steps.creds.outputs.ready == 'true'
+        run: npm run lint
+
+      # No base path on Firebase — the site is served from the domain root
+      - name: Build static site
+        if: steps.creds.outputs.ready == 'true'
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SITE_URL: https://moibrahem98.web.app
+
+      - name: Deploy to Firebase Hosting (live)
+        if: steps.creds.outputs.ready == 'true'
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: moibrahem98
+          channelId: live
